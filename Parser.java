@@ -96,14 +96,21 @@ public class Parser {
         if (endIndex == -1){
             return "";
         }
-        return body.substring(properNestingIdx,endIndex);
+        //Strip spaces
+        String response = body.substring(properNestingIdx,endIndex);
+        response = response.stripLeading();
+        response = response.stripTrailing();
+        return response;
     }
 
-    public String deepJSON(String body,String keyText){
+    public String deepJSON(String body,String keyText,boolean includeKey){
         String[] tokens = keyText.split("\\.");
+        String start = "";
         for (String token:tokens){
             body = findJSON(body,token);
+            start = "'"+token+"':";
         }
+        body = includeKey ? start+body : body;
         System.out.println(body);
         return body;
     }
